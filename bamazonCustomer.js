@@ -32,11 +32,10 @@ function afterConnection() {
                 console.log(chalk.bold.greenBright('\n*********************************************************'));
                 console.log(chalk.bold.gray("Product ID: ") + chalk.bold.redBright(res[i].item_id) + ' ' + chalk.gray.bold.underline('use this number to place order'));
                 console.log(chalk.bold.gray("Product name: ") + res[i].product_name);
-                console.log(chalk.bold.gray("Unit price: $") + res[i].price);
+                console.log(chalk.bold.gray("Unit price: $") + res[i].price + '\n');
                 //console.log(chalk.gray("Quantity currently in stock: ") + res[i].stock_quantity + "-pc.");
                 //console.log(chalk.gray("Department: ") + res[i].dept_name);
-                console.log(chalk.gray("position: ") + res[i].position);
-                console.log('');
+                // console.log(chalk.gray("position: ") + res[i].position);
             }
         }
         itemPurch(res);
@@ -70,12 +69,13 @@ function confirm() {
 
 //. Updates current stock quantities in MySQL products database
 function dbaseUpdate(purchQuant, currInvent, prod) {
-    console.log("in update funct purchQuant: ", purchQuant);
-        console.log("in update funct inventory: ", currInvent);
-            console.log("in update funct prod: ", prod);
-    console.log('\nYour order has been fulfilled and is ready to ship\n');
+    console.log(chalk.bold.bgYellowBright('\n  Your order has been fulfilled and is ready to ship  \n'));
+    console.log(chalk.rgb(200,200,200)('********** FOR STORE USE ONLY **********'));
+    console.log(chalk.gray('previous nventory: ', currInvent));
     currInvent -= purchQuant;
-    console.log('this is the new inventory : ', currInvent)
+    console.log(chalk.gray('current inventory: ', currInvent));
+    console.log(chalk.rgb(200,200,200)('****************************************\n'));
+
     connect.query("UPDATE products SET ? WHERE ?", [{
         stock_quantity: currInvent
     }, {
@@ -84,8 +84,6 @@ function dbaseUpdate(purchQuant, currInvent, prod) {
         if (err) {
             console.error(chalk.bold.redBright('Oops something bad just went down on the update: '), err);
         } else {
-            console.log(res.affectedRows + ' product updated!\n');
-            console.log('new inventory: ', currInvent + '\n');
             confirm();
 
         }
@@ -98,16 +96,13 @@ function itemPurch(product) {
         type: 'input',
         name: 'productId',
         message: 'Enter the ID of the product you would like to purchase.',
-        validate: validateInput
+        alidate: validateInput
     }]).then(function(answer) {
         const orderId = answer.productId;
-console.log('product.length: ',product.length);
         for (var i = 0; i < product.length; i++) {
             if (orderId == product[i].item_id) {
                 var id = i;
                 var prod = (product[i].product_name);
-                console.log('product['+i+'].product_name: ',product[i].product_name);
-
             }
         }
 
@@ -120,8 +115,12 @@ console.log('product.length: ',product.length);
             var purchQuant = quantAns.prodQuantity;
             var inventory = product[id].stock_quantity;
             // console.log('product[id].stock_quantity: ' + inventory + ' +typeof: ' + typeof(product[id].stock_quantity));
-            // console.log('prod = (product[id].product_name) ',prod = (product[id].product_name))
-            if (parseInt(purchQuant) <= inventory) {
+            // console.log('prod = (product[id].product_name) ',prod = (product[id].product_name)
+
+            if (inventory === 0) {
+                console.log('sorry we are out of stock on the ', prod);
+                confirm();
+            } else if (parseInt(purchQuant) <= inventory) {
                 dbaseUpdate(purchQuant, inventory, orderId);
             } else {
                 console.log('\nWe are currently low on inventory for the ' + prod + ' we can ship only ' + inventory + ' ' + prod + '\n');
@@ -145,7 +144,34 @@ console.log('product.length: ',product.length);
 
 
 
-// const stk_adjuster = function quantAdj(num){
-//              var inventory = inventory - num;
-//              return inventory
+// switch (quantAns) {
+//     case (parseInt(purchQuant) <= inventory):
+//         dbaseUpdate(purchQuant, inventory, orderId);
+//         break;
+
+//     case (parseInt(purchQuant) > inventory) && (inventory > 0):
+//         console.log('\nWe are currently low on inventory for the ' + prod + ' we can ship only ' + inventory + ' ' + prod + '\n');
+//         inquirer.prompt([{
+//             type: "confirm",
+//             message: "Would you like us to send " + inventory + ' of the ' + prod,
+//             name: "confirm",
+//             default: true
+//         }]).then(function(confirmAns) {
+//             switch (confirmAns) {
+//                 case confirmAns.confirm:
+//                 dbaseUpdate(purchQuant, inventory, answer);
+//                 break;
+
+//                 case !confirmAns.confirm:
+//                 confirm();
+//                 break;
 //             }
+//         });
+//         break;
+
+//     case inventory = 0:
+//         console.log('sorry we are out of stock on ', prod);
+//         confirm();
+//         break;
+
+// }
