@@ -23,20 +23,22 @@ connect.connect(function(err) {
 });
 
 function afterConnection() {
-    connect.query("SELECT * FROM products", function(err, res) {
+    const productsQuery = "SELECT * FROM products";
+    connect.query(productsQuery, function(err, res) {
         if (err) {
             console.error(chalk.bold.redBright('Oops something bad just went down: '), err);
         } else {
             for (let i = 0; i < res.length; i++) {
-                console.log(chalk.bold.greenBright('\n*************************************************'));
-                console.log(chalk.bold.gray("Product ID: ") + chalk.bold.green(res[i].item_id + ' use this number to place order'));
+                console.log(chalk.bold.greenBright('\n*********************************************************'));
+                console.log(chalk.bold.gray("Product ID: ") + chalk.bold.redBright(res[i].item_id) + ' ' + chalk.gray.bold.underline('use this number to place order'));
                 console.log(chalk.bold.gray("Product name: ") + res[i].product_name);
                 console.log(chalk.bold.gray("Unit price: $") + res[i].price);
-                console.log(chalk.gray("Quantity currently in stock: ") + res[i].stock_quantity + "-pc.");
-                console.log(chalk.gray("Department: ") + res[i].dept_name);
+                //console.log(chalk.gray("Quantity currently in stock: ") + res[i].stock_quantity + "-pc.");
+                //console.log(chalk.gray("Department: ") + res[i].dept_name);
+                console.log(chalk.gray("position: ") + res[i].position);
+                console.log('');
             }
         }
-        console.log('');
         itemPurch(res);
     });
 }
@@ -50,16 +52,47 @@ function validateInput(name) {
     }
 }
 
-// function updateDBase(purchQuant, inventory) {
-//     console.log('inside updateDbsase');
-//     product[id].stock_quantity: product[id].stock_quantity - prodQuant;
-//     connect.query("UPDATE products SET ? WHERE ?", [{
-//         inventory: inventory - purchQuant;
-//         console.log()
+// general user confirmation to keep purchasing on Bamazon
+function confirm() {
+    inquirer.prompt([{
+        type: 'confirm',
+        message: 'Would you like purchase something else? ',
+        name: 'confirm',
+        default: true
+    }]).then(function(confirmAns) {
+        if (confirmAns.confirm) {
+            afterConnection();
+        } else {
+            console.log(chalk.bold.redBright('OK bye, bye!'));
+        }
+    });
+}
 
-//     }])
-// }
+//. Updates current stock quantities in MySQL products database
+function dbaseUpdate(purchQuant, currInvent, prod) {
+    console.log("in update funct purchQuant: ", purchQuant);
+        console.log("in update funct inventory: ", currInvent);
+            console.log("in update funct prod: ", prod);
+    console.log('\nYour order has been fulfilled and is ready to ship\n');
+    currInvent -= purchQuant;
+    console.log('this is the new inventory : ', currInvent)
+    connect.query("UPDATE products SET ? WHERE ?", [{
+        stock_quantity: currInvent
+    }, {
+        item_id: prod
+    }], function(err, res) {
+        if (err) {
+            console.error(chalk.bold.redBright('Oops something bad just went down on the update: '), err);
+        } else {
+            console.log(res.affectedRows + ' product updated!\n');
+            console.log('new inventory: ', currInvent + '\n');
+            confirm();
 
+        }
+    });
+}
+
+//function that controls the CLI during the user purchase experience
 function itemPurch(product) {
     inquirer.prompt([{
         type: 'input',
@@ -67,49 +100,44 @@ function itemPurch(product) {
         message: 'Enter the ID of the product you would like to purchase.',
         validate: validateInput
     }]).then(function(answer) {
-        let orderId = answer.productId;
-        // var prod;
-        for (let i = 0; i < product.length; i++) {
-            console.log('i: ' + i + ' this is the current postion: ' + product[i].position + ' ' + product[i].product_name);
-            console.log('current product name: ', product[i].product_name);
+        const orderId = answer.productId;
+console.log('product.length: ',product.length);
+        for (var i = 0; i < product.length; i++) {
             if (orderId == product[i].item_id) {
-            	console.log('made the if statement')
                 var id = i;
-                console.log('id: ',id + 'this is the prod choosen: '+ product[i].product_name);
                 var prod = (product[i].product_name);
+                console.log('product['+i+'].product_name: ',product[i].product_name);
+
             }
         }
-        // console.log('product purchase id: ', id);
-        // console.log('prod inventory qty: ', product[id].stock_quantity);
+
         inquirer.prompt([{
             type: 'input',
             name: 'prodQuantity',
-            message: 'How many units of ' + prod + 's you would like to buy.',
+            message: 'How many units of ' + prod + ' you would like to buy.',
             validate: validateInput
         }]).then(function(quantAns) {
             var purchQuant = quantAns.prodQuantity;
             var inventory = product[id].stock_quantity;
-            console.log('product[id].stock_quantity: ' + product[id].stock_quantity + ' +typeof: ' + typeof(product[id].stock_quantity)+ "this is inventory: "+inventory);
+            // console.log('product[id].stock_quantity: ' + inventory + ' +typeof: ' + typeof(product[id].stock_quantity));
             // console.log('prod = (product[id].product_name) ',prod = (product[id].product_name))
             if (parseInt(purchQuant) <= inventory) {
-                console.log('Your order has been fulfilled and is ready to ship\n');
-                inventory = inventory - purchQuant;
-                console.log('this is new inventory: ',inventory)
-                connect.query("UPDATE products SET ? WHERE ?", [{
-                        stock_quantity: inventory
-                    }, {
-                        item_id: id
-                    }],
-                    function(err) {
-                        if (err) {
-                            console.error(chalk.bold.redBright('Oops something bad just went down: '), err);
-                        } else {
-                            console.log("new inventory: ", stock_quantity);
-                            console.log("");
-                        }
-                    })
+                dbaseUpdate(purchQuant, inventory, orderId);
             } else {
-                console.log('We are currently low on inventory for ' + prod + 'we can ship only ' + inventory);
+                console.log('\nWe are currently low on inventory for the ' + prod + ' we can ship only ' + inventory + ' ' + prod + '\n');
+                inquirer.prompt([{
+                    type: "confirm",
+                    message: "Would you like us to send " + inventory + ' of the ' + prod,
+                    name: "confirm",
+                    default: true
+                }]).then(function(confirmAns) {
+                    if (confirmAns.confirm) {
+                        purchQuant = inventory;
+                        dbaseUpdate(purchQuant, inventory, answer);
+                    } else {
+                        confirm();
+                    }
+                })
             }
         });
     });
@@ -118,6 +146,6 @@ function itemPurch(product) {
 
 
 // const stk_adjuster = function quantAdj(num){
-//             	var inventory = inventory - num;
-//             	return inventory
+//              var inventory = inventory - num;
+//              return inventory
 //             }
