@@ -28,6 +28,8 @@ prompt users with two messages.
    * department_name
    * price (cost to customer)
    * stock_quantity (how much of the product is available in stores)
+   
+<img width="815" alt="screen shot 2017-07-06 at 3 08 37 am" src="https://user-images.githubusercontent.com/3219942/27899545-a0d7aecc-61f8-11e7-9dfd-922f6be314ea.png">
 
 3. Once the customer has placed the order, the app checks the store for enough inventory to meet the customer's request.
 
