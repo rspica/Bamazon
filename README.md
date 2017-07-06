@@ -21,7 +21,7 @@ prompt users with two messages.
    * The first should ask them the ID of the product they would like to buy.
    * The second message should ask how many units of the product they would like to buy.
 
-2. MySQL Database called `Bamazon` with tables (called `products`). The products table have the following columns:
+2. MySQL Database with tables (called `products`). The products table have the following columns:
 
    * item_id (unique id for each product)
    * product_name (Name of product)
