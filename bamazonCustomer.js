@@ -1,7 +1,9 @@
 const mysql = require("mysql");
 const inquirer = require('inquirer');
 const chalk = require('chalk');
+var totalAmt = 0;
 
+/// establishes the credentials for connecting to the database
 const connect = mysql.createConnection({
     host: "jj820qt5lpu6krut.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
     port: 3306,
@@ -10,6 +12,7 @@ const connect = mysql.createConnection({
     database: "cdl03md98f9yltb2"
 });
 
+// makes connection to the MySQL database
 connect.connect(function(err) {
     if (err) {
         console.error('Oops something bad just went down: ', err);
@@ -22,6 +25,7 @@ connect.connect(function(err) {
     }
 });
 
+// pulls and displays required data from MySQL
 function afterConnection() {
     const productsQuery = "SELECT * FROM products";
     connect.query(productsQuery, function(err, res) {
@@ -45,13 +49,13 @@ function afterConnection() {
 // validates that user enters a response to the question
 function validateInput(name) {
     if (name === "" || name === " ") {
-        console.log('Please enter a product name')
+        console.log('Please enter a product ID')
     } else {
         return name !== '';
     }
 }
 
-// general user confirmation to keep purchasing on Bamazon
+// user confirmation to continue the purchasing cycle on Bamazon
 function confirm() {
     inquirer.prompt([{
         type: 'confirm',
@@ -62,116 +66,97 @@ function confirm() {
         if (confirmAns.confirm) {
             afterConnection();
         } else {
-            console.log(chalk.bold.redBright('OK bye, bye!'));
+            console.log(chalk.bold.redBright('\nOK bye, bye!\n\n'));
+            process.exit(0);
         }
     });
 }
 
 //. Updates current stock quantities in MySQL products database
-function dbaseUpdate(purchQuant, currInvent, prod) {
-    console.log(chalk.bold.bgYellowBright('\n  Your order has been fulfilled and is ready to ship  \n'));
-    console.log(chalk.rgb(200,200,200)('********** FOR STORE USE ONLY **********'));
-    console.log(chalk.gray('previous nventory: ', currInvent));
+function dbaseUpdate(purchQuant, currInvent, price, prod) {
+    console.log(chalk.bold.bgYellowBright('\n Your order has been fulfilled and is ready to ship '));
+    console.log(chalk.bold(' Your total for your purchase of the ' + prod + ' is: ' + chalk.bold.greenBright(price.toFixed(2)) + '\n'));
+
+    totalAmt += price
+    console.log(chalk.bold(' The total amount spent currently is: ' + chalk.bold.greenBright(totalAmt.toFixed(2)) + '\n'));
+    console.log(chalk.rgb(200, 200, 200)('********** FOR STORE USE ONLY **********'));
+    console.log(chalk.gray('previous inventory: ', currInvent));
+
     currInvent -= purchQuant;
     console.log(chalk.gray('current inventory: ', currInvent));
-    console.log(chalk.rgb(200,200,200)('****************************************\n'));
+    console.log(chalk.rgb(200, 200, 200)('****************************************\n'));
 
     connect.query("UPDATE products SET ? WHERE ?", [{
         stock_quantity: currInvent
     }, {
-        item_id: prod
+        product_name: prod
     }], function(err, res) {
         if (err) {
             console.error(chalk.bold.redBright('Oops something bad just went down on the update: '), err);
         } else {
             confirm();
-
         }
     });
 }
 
-//function that controls the CLI during the user purchase experience
+//function that controls the CLI during the user purchase experience: what item
 function itemPurch(product) {
     inquirer.prompt([{
         type: 'input',
         name: 'productId',
         message: 'Enter the ID of the product you would like to purchase.',
-        alidate: validateInput
+        validate: validateInput
     }]).then(function(answer) {
         const orderId = answer.productId;
         for (var i = 0; i < product.length; i++) {
             if (orderId == product[i].item_id) {
                 var id = i;
-                var prod = (product[i].product_name);
+                var purchItem = {
+                    id: i,
+                    name: product[i].product_name,
+                    price: product[i].price,
+                    qty: product[i].stock_quantity
+                }
             }
         }
-
-        inquirer.prompt([{
-            type: 'input',
-            name: 'prodQuantity',
-            message: 'How many units of ' + prod + ' you would like to buy.',
-            validate: validateInput
-        }]).then(function(quantAns) {
-            var purchQuant = quantAns.prodQuantity;
-            var inventory = product[id].stock_quantity;
-            // console.log('product[id].stock_quantity: ' + inventory + ' +typeof: ' + typeof(product[id].stock_quantity));
-            // console.log('prod = (product[id].product_name) ',prod = (product[id].product_name)
-
-            if (inventory === 0) {
-                console.log('sorry we are out of stock on the ', prod);
-                confirm();
-            } else if (parseInt(purchQuant) <= inventory) {
-                dbaseUpdate(purchQuant, inventory, orderId);
-            } else {
-                console.log('\nWe are currently low on inventory for the ' + prod + ' we can ship only ' + inventory + ' ' + prod + '\n');
-                inquirer.prompt([{
-                    type: "confirm",
-                    message: "Would you like us to send " + inventory + ' of the ' + prod,
-                    name: "confirm",
-                    default: true
-                }]).then(function(confirmAns) {
-                    if (confirmAns.confirm) {
-                        purchQuant = inventory;
-                        dbaseUpdate(purchQuant, inventory, answer);
-                    } else {
-                        confirm();
-                    }
-                })
-            }
-        });
+        productAmt(purchItem);
     });
 }
 
-
-
-// switch (quantAns) {
-//     case (parseInt(purchQuant) <= inventory):
-//         dbaseUpdate(purchQuant, inventory, orderId);
-//         break;
-
-//     case (parseInt(purchQuant) > inventory) && (inventory > 0):
-//         console.log('\nWe are currently low on inventory for the ' + prod + ' we can ship only ' + inventory + ' ' + prod + '\n');
-//         inquirer.prompt([{
-//             type: "confirm",
-//             message: "Would you like us to send " + inventory + ' of the ' + prod,
-//             name: "confirm",
-//             default: true
-//         }]).then(function(confirmAns) {
-//             switch (confirmAns) {
-//                 case confirmAns.confirm:
-//                 dbaseUpdate(purchQuant, inventory, answer);
-//                 break;
-
-//                 case !confirmAns.confirm:
-//                 confirm();
-//                 break;
-//             }
-//         });
-//         break;
-
-//     case inventory = 0:
-//         console.log('sorry we are out of stock on ', prod);
-//         confirm();
-//         break;
-
-// }
+//function that controls the CLI during the user purchase experience; how many
+function productAmt(item) {
+    var inventory = item.qty;
+    var price = item.price;
+    var name = item.name;
+    inquirer.prompt([{
+        type: 'input',
+        name: 'prodQuantity',
+        message: 'How many ' + name + ' you would like to buy.',
+        validate: validateInput
+    }]).then(function(quantAns) {
+        var purchQuant = parseInt(quantAns.prodQuantity);
+        if (inventory === 0) {
+            console.log('\nsorry we are out of stock on the ' + name + '\n');
+            confirm();
+        } else if (purchQuant <= inventory) {
+            var amount = purchQuant * price
+            dbaseUpdate(purchQuant, inventory, amount, name);
+        } else {
+            console.log(chalk.redBright('\nWe are currently low on inventory ' + chalk.bold('we can ship only ' + inventory) + ' of the ' + name )+ '\n');
+            inquirer.prompt([{
+                type: "confirm",
+                message: "Would you like us to send " + inventory + ' of the ' + name,
+                name: "confirm",
+                default: true
+            }]).then(function(confirmAns) {
+                if (confirmAns.confirm) {
+                    purchQuant = inventory;
+                    var amount = purchQuant * price
+                    dbaseUpdate(purchQuant, inventory, amount, name);
+                } else {
+                    confirm();
+                }
+            })
+        }
+    });
+}
