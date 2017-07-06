@@ -36,7 +36,7 @@ prompt users with two messages.
     * This action updates the SQL database to reflect the remaining quantity.
     * Once executed, customer is shown the total cost of their purchase.
     
-    
+    <img width="808" alt="screen shot 2017-07-06 at 3 11 58 am" src="https://user-images.githubusercontent.com/3219942/27899873-027d0d4c-61fa-11e7-8d2b-6eddfd94f3e6.png">
     
     * If the inventory is at 0 the app logs `sorry we are out of stock on the _product name here_`, and prevents the order from processing and the customer's order is not fullfilled.
     
