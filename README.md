@@ -45,7 +45,8 @@ prompt users with two messages.
     
     * if the inventory is only partial to the requested quantity the app logs ` We are currently low on inventory for the _product name here_. we can ship only _X_` and the app log `would you like us to send _X_ amount...`
     
-    
+    <img width="808" alt="screen shot 2017-07-06 at 3 15 44 am" src="https://user-images.githubusercontent.com/3219942/27899979-6aa11f1c-61fa-11e7-92d3-f1ab03fe99f7.png">
+
     
 4. the order process repeats; the app log `Would you like purchase something else? (Y/n)` if yes the process continues if no the cycle ends and the app exits back to the command line.
 
