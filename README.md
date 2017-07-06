@@ -49,6 +49,6 @@ prompt users with two messages.
     
 4. the order process repeats; the app log `Would you like purchase something else? (Y/n)` if yes the process continues if no the cycle ends and the app exits back to the command line.
 
-<img width="808" alt="screen shot 2017-07-06 at 3 18 41 am" src="https://user-images.githubusercontent.com/3219942/27900198-5ff0510e-61fb-11e7-8338-469c7388c3e4.pn
+
 
 - - -
