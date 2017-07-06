@@ -34,6 +34,9 @@ prompt users with two messages.
     * if ther store _does_ have enough of the product, the customer's order is fullfilled.
     * This action updates the SQL database to reflect the remaining quantity.
     * Once executed, customer is shown the total cost of their purchase.
-    * if the inventory is only partiasl to the requested quantity the app logs ` We are currently low on inventory for the _product name lister here_ we can ship only _X_`
-    * If the inventory is at 0 the app logs `sorry we are out of stock on the _product name lister here_`, and prevents the order from processing.
+    * if the inventory is only partial to the requested quantity the app logs ` We are currently low on inventory for the _product name here_. we can ship only _X_` and the app log `would you like us to send _X_ amount...`
+    * If the inventory is at 0 the app logs `sorry we are out of stock on the _product name here_`, and prevents the order from processing.
+    
+4. the order process repeats; the app log `Would you like purchase something else? (Y/n)` if yes the process continues if no the cycle ends and the app exits back to the command line.
+
 - - -
