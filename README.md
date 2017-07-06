@@ -16,29 +16,24 @@ This project requires the MySQL and Inquirer npm packages the app needs them for
 
 1. `bamazonCustomer.js`. display all of the items available for sale. this includes the ids, names, and prices of products for sale. _(see MySQL table list below)_
 
-2. `bamCLI.js` prompt users with two messages.
+prompt users with two messages.
 
    * The first should ask them the ID of the product they would like to buy.
    * The second message should ask how many units of the product they would like to buy.
 
-3. MySQL Database called `Bamazon` with tables (called `products`). The products table have the following columns:
+2. MySQL Database called `Bamazon` with tables (called `products`). The products table have the following columns:
 
    * item_id (unique id for each product)
-
    * product_name (Name of product)
-
    * department_name
-
    * price (cost to customer)
-
    * stock_quantity (how much of the product is available in stores)
 
+3. Once the customer has placed the order, the app checks the store for enough inventory to meet the customer's request.
 
-4. Once the customer has placed the order, the app checks the store for enough inventory to meet the customer's request.
-
-   * if ther store _does_ have enough of the product, the customer's order is fullfilled.
+    * if ther store _does_ have enough of the product, the customer's order is fullfilled.
     * This action updates the SQL database to reflect the remaining quantity.
     * Once executed, customer is shown the total cost of their purchase.
-
-   * If not, the app logs `Insufficient quantity! your order is will not be processed`, and prevents the order from processing.
+    * if the inventory is only partiasl to the requested quantity the app logs ` We are currently low on inventory for the _product name lister here_ we can ship only _X_`
+    * If the inventory is at 0 the app logs `sorry we are out of stock on the _product name lister here_`, and prevents the order from processing.
 - - -
