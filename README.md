@@ -1,8 +1,8 @@
 # Bamazon
-an Amazon-like storefront with the MySQL
+an Amazon-like storefront :facepunch: with the MySQL
 
 
-# Week of 12 HW: Node.js & MySQL :facepunch:
+# Week of 12 HW: Node.js & MySQL
 
 ## Overview
 
