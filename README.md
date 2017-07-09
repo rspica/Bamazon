@@ -1,4 +1,4 @@
-# Bamazon
+# Bamazon :facepunch:
 an Amazon-like storefront with the MySQL
 
 
