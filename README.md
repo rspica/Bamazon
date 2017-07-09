@@ -33,17 +33,17 @@ prompt users with two messages.
 
 3. Once the customer has placed the order, the app checks the store for enough inventory to meet the customer's request.
 
-    * This action updates the SQL database to reflect the remaining quantity.
-    * Once executed, customer is shown the total cost of their purchase.
+   * This action updates the SQL database to reflect the remaining quantity.
+   * Once executed, customer is shown the total cost of their purchase.
     
 <img width="808" alt="screen shot 2017-07-06 at 3 11 58 am" src="https://user-images.githubusercontent.com/3219942/27899873-027d0d4c-61fa-11e7-8d2b-6eddfd94f3e6.png">
-    
-    * If the inventory is at 0 the app logs `sorry we are out of stock on the _product name here_`, and prevents the order from processing and the customer's order is not fullfilled.
+
+   * If the inventory is at 0 the app logs `sorry we are out of stock on the _product name here_`, and prevents the order from processing and the customer's order is not fullfilled.
     
 <img width="808" alt="screen shot 2017-07-06 at 3 13 28 am" src="https://user-images.githubusercontent.com/3219942/27899935-3eb067fa-61fa-11e7-81f6-65962cf792d4.png">
 
     
-    * if the inventory is only partial to the requested quantity the app logs ` We are currently low on inventory for the _product name here_. we can ship only _X_` and the app log `would you like us to send _X_ amount...`
+   * if the inventory is only partial to the requested quantity the app logs ` We are currently low on inventory for the _product name here_. we can ship only _X_` and the app log `would you like us to send _X_ amount...`
     
 <img width="808" alt="screen shot 2017-07-06 at 3 28 31 am" src="https://user-images.githubusercontent.com/3219942/27900194-5dad2ff2-61fb-11e7-82c3-d7a5dd0b6cfe.png">
     
