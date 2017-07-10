@@ -59,4 +59,13 @@ prompt users with two messages.
 ![Alt Text](https://github.com/rspica/Bamazon/blob/master/README-img/Screen%20Shot%202017-07-06%20at%203.18.41%20AM.png)
 
 
+
+***************************************************************************************************
+# Build Setup
+***************************************************************************************************
+# install dependencies
+mysql
+inquirer
+chalk
+
 - - -
