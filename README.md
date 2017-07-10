@@ -31,7 +31,7 @@ prompt users with two messages.
    
 ![Alt Text](https://github.com/rspica/Bamazon/blob/master/README-img/Screen%20Shot%202017-07-06%20at%203.08.37%20AM.png)
    
-
+   
 
 3. Once the customer has placed the order, the app checks the store for enough inventory to meet the customer's request.
 
@@ -43,16 +43,19 @@ prompt users with two messages.
 
    * If the inventory is at 0 the app logs `sorry we are out of stock on the _product name here_`, and prevents the order from processing and the customer's order is not fullfilled.
    
-https://github.com/rspica/Bamazon/blob/master/README-img/Screen%20Shot%202017-07-06%20at%203.13.28%20AM.png
-<img width="808" alt="screen shot 2017-07-06 at 3 13 28 am" src="https://user-images.githubusercontent.com/3219942/27899935-3eb067fa-61fa-11e7-81f6-65962cf792d4.png">
+![Alt Text](https://github.com/rspica/Bamazon/blob/master/README-img/Screen%20Shot%202017-07-06%20at%203.13.28%20AM.png)
+
 
     
    * if the inventory is only partial to the requested quantity the app logs ` We are currently low on inventory for the _product name here_. we can ship only _X_` and the app log `would you like us to send _X_ amount...`
     
-<img width="808" alt="screen shot 2017-07-06 at 3 28 31 am" src="https://user-images.githubusercontent.com/3219942/27900194-5dad2ff2-61fb-11e7-82c3-d7a5dd0b6cfe.png">
+![Alt Text](https://github.com/rspica/Bamazon/blob/master/README-img/Screen%20Shot%202017-07-06%20at%203.28.31%20AM.png)
+
+
     
 4. the order process repeats; the app log `Would you like purchase something else? (Y/n)` if yes the process continues if no the cycle ends and the app exits back to the command line.
 
-<img width="808" alt="screen shot 2017-07-06 at 3 18 41 am" src="https://user-images.githubusercontent.com/3219942/27900264-a4753c18-61fb-11e7-8dd6-b5043391bc68.png">
+![Alt Text](https://github.com/rspica/Bamazon/blob/master/README-img/Screen%20Shot%202017-07-06%20at%203.18.41%20AM.png)
+
 
 - - -
