@@ -42,7 +42,8 @@ prompt users with two messages.
 
 
    * If the inventory is at 0 the app logs `sorry we are out of stock on the _product name here_`, and prevents the order from processing and the customer's order is not fullfilled.
-    
+   
+https://github.com/rspica/Bamazon/blob/master/README-img/Screen%20Shot%202017-07-06%20at%203.13.28%20AM.png
 <img width="808" alt="screen shot 2017-07-06 at 3 13 28 am" src="https://user-images.githubusercontent.com/3219942/27899935-3eb067fa-61fa-11e7-81f6-65962cf792d4.png">
 
     
