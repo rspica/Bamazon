@@ -62,10 +62,10 @@ prompt users with two messages.
 
 ***************************************************************************************************
 # Build Setup
-***************************************************************************************************
-# install dependencies
-mysql
-inquirer
-chalk
+
+### install dependencies
+* mysql
+* inquirer
+* chalk
 
 - - -
