@@ -28,17 +28,18 @@ prompt users with two messages.
    * department_name
    * price (cost to customer)
    * stock_quantity (how much of the product is available in stores)
-   
+
 ![Alt Text](https://github.com/rspica/Bamazon/blob/master/README-img/Screen%20Shot%202017-07-06%20at%203.08.37%20AM.png)
-   
-   
+
+
 
 3. Once the customer has placed the order, the app checks the store for enough inventory to meet the customer's request.
 
    * This action updates the SQL database to reflect the remaining quantity.
    * Once executed, customer is shown the total cost of their purchase.
-   
+
 ![Alt Text](https://github.com/rspica/Bamazon/blob/master/README-img/Screen%20Shot%202017-07-06%20at%203.11.58%20AM.png)
+
 
 
    * If the inventory is at 0 the app logs `sorry we are out of stock on the _product name here_`, and prevents the order from processing and the customer's order is not fullfilled.
@@ -46,9 +47,9 @@ prompt users with two messages.
 ![Alt Text](https://github.com/rspica/Bamazon/blob/master/README-img/Screen%20Shot%202017-07-06%20at%203.13.28%20AM.png)
 
 
-    
-   * if the inventory is only partial to the requested quantity the app logs ` We are currently low on inventory for the _product name here_. we can ship only _X_` and the app log `would you like us to send _X_ amount...`
-    
+
+* if the inventory is only partial to the requested quantity the app logs ` We are currently low on inventory for the _product name here_. we can ship only _X_` and the app log `would you like us to send _X_ amount...`
+ 
 ![Alt Text](https://github.com/rspica/Bamazon/blob/master/README-img/Screen%20Shot%202017-07-06%20at%203.28.31%20AM.png)
 
 
