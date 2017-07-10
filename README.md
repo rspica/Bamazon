@@ -29,7 +29,7 @@ prompt users with two messages.
    * price (cost to customer)
    * stock_quantity (how much of the product is available in stores)
    
-![Alt Text](https://github.com/rspica/Bamazon/blob/master/README-img/Screen%20Shot%202017-07-06%20at%203.08.37%20AM.png | width="800")
+![Alt Text](https://github.com/rspica/Bamazon/blob/master/README-img/Screen%20Shot%202017-07-06%20at%203.08.37%20AM.png)
    
 
 
@@ -38,7 +38,7 @@ prompt users with two messages.
    * This action updates the SQL database to reflect the remaining quantity.
    * Once executed, customer is shown the total cost of their purchase.
    
-![Alt Text](https://github.com/rspica/Bamazon/blob/master/README-img/Screen%20Shot%202017-07-06%20at%203.11.58%20AM.png | width="800")
+![Alt Text](https://github.com/rspica/Bamazon/blob/master/README-img/Screen%20Shot%202017-07-06%20at%203.11.58%20AM.png)
 
 
    * If the inventory is at 0 the app logs `sorry we are out of stock on the _product name here_`, and prevents the order from processing and the customer's order is not fullfilled.
