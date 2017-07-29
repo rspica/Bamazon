@@ -2,13 +2,29 @@
 an Amazon-like storefrontwith the MySQL :facepunch: 
 
 
-# Week of 12 HW: Node.js & MySQL
+Node.js & MySQL
 
 ## Overview
 
 This Repo simulates an Amazon-like storefront with MySQL. The app will take in orders from customers and deplete stock from the store's inventory. As a bonus task, the app should track product sales across the store's departments and then provide a summary of the highest-grossing departments in the store.
 
 This project requires the MySQL and Inquirer npm packages the app needs them for data input and storage.
+
+## Installation
+
+To install the Bamazon application locally follow the instructions below:
+
+With the command line:
+
+* 1 `git clone https://github.com/rspica/Bamazon.git`
+* 2 `cd Bamazon`
+* 3 `npm install`
+* 4 Run the Bamazon server via the command line locally: `node server.js`
+
+The Bamazon app will now be running locally, connecting to a MySQL DB on port 3306 via an aws hosting service
+
+The CLI prompts will walk you through the DB experience (outlined below)
+
 
 ## Project overview
 
